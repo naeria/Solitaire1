@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://crhqb022xmiav"]
+
+[ext_resource type="Script" uid="uid://dl6q7cbr52ain" path="res://Scripts/card.gd" id="2_wf8id"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0qqmn"]
+size = Vector2(500, 726)
+
+[node name="Card" type="Node2D"]
+script = ExtResource("2_wf8id")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.2, 0.2)
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, 3.05176e-05)
+scale = Vector2(0.25, 0.25)
+shape = SubResource("RectangleShape2D_0qqmn")
