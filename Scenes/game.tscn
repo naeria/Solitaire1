@@ -1,9 +1,9 @@
 [gd_scene load_steps=10 format=3 uid="uid://c1ouo8lbp1ebm"]
 
-[ext_resource type="Script" uid="uid://daswfnxijerxc" path="res://Scripts/game.gd" id="1_3dryh"]
-[ext_resource type="Script" uid="uid://bx6fkfnj8ait0" path="res://Scripts/tableau.gd" id="2_wrm1d"]
-[ext_resource type="PackedScene" uid="uid://crhqb022xmiav" path="res://Scenes/card.tscn" id="3_wrm1d"]
-[ext_resource type="Script" uid="uid://cvmaamjr3lo6v" path="res://Scripts/foundation1.gd" id="4_3dryh"]
+[ext_resource type="Script" path="res://Scripts/game.gd" id="1_wr7al"]
+[ext_resource type="Script" path="res://Scripts/tableau.gd" id="2_rb7bf"]
+[ext_resource type="PackedScene" path="res://Scenes/card.tscn" id="3_nme6e"]
+[ext_resource type="Script" path="res://Scripts/foundation1.gd" id="4_3vbhj"]
 
 [sub_resource type="GDScript" id="GDScript_wrm1d"]
 script/source = "extends Node2D
@@ -32,7 +32,7 @@ size = Vector2(125, 181.5)
 size = Vector2(125, 181.5)
 
 [node name="Game" type="Node2D"]
-script = ExtResource("1_3dryh")
+script = ExtResource("1_wr7al")
 
 [node name="Background" type="ColorRect" parent="."]
 anchors_preset = 15
@@ -43,42 +43,42 @@ grow_vertical = 2
 color = Color(0, 0.392157, 0, 1)
 
 [node name="Tableau" type="Node2D" parent="."]
-script = ExtResource("2_wrm1d")
+script = ExtResource("2_rb7bf")
 
 [node name="Pile1" type="Node2D" parent="Tableau"]
 position = Vector2(100, 300)
 
-[node name="Card" parent="Tableau/Pile1" instance=ExtResource("3_wrm1d")]
+[node name="Card" parent="Tableau/Pile1" instance=ExtResource("3_nme6e")]
 
 [node name="Pile2" type="Node2D" parent="Tableau"]
 position = Vector2(250, 300)
 
-[node name="Card" parent="Tableau/Pile2" instance=ExtResource("3_wrm1d")]
+[node name="Card" parent="Tableau/Pile2" instance=ExtResource("3_nme6e")]
 
 [node name="Pile3" type="Node2D" parent="Tableau"]
 position = Vector2(400, 300)
 
-[node name="Card" parent="Tableau/Pile3" instance=ExtResource("3_wrm1d")]
+[node name="Card" parent="Tableau/Pile3" instance=ExtResource("3_nme6e")]
 
 [node name="Pile4" type="Node2D" parent="Tableau"]
 position = Vector2(550, 300)
 
-[node name="Card" parent="Tableau/Pile4" instance=ExtResource("3_wrm1d")]
+[node name="Card" parent="Tableau/Pile4" instance=ExtResource("3_nme6e")]
 
 [node name="Pile5" type="Node2D" parent="Tableau"]
 position = Vector2(700, 300)
 
-[node name="Card" parent="Tableau/Pile5" instance=ExtResource("3_wrm1d")]
+[node name="Card" parent="Tableau/Pile5" instance=ExtResource("3_nme6e")]
 
 [node name="Pile6" type="Node2D" parent="Tableau"]
 position = Vector2(850, 300)
 
-[node name="Card" parent="Tableau/Pile6" instance=ExtResource("3_wrm1d")]
+[node name="Card" parent="Tableau/Pile6" instance=ExtResource("3_nme6e")]
 
 [node name="Pile7" type="Node2D" parent="Tableau"]
 position = Vector2(1000, 300)
 
-[node name="Card" parent="Tableau/Pile7" instance=ExtResource("3_wrm1d")]
+[node name="Card" parent="Tableau/Pile7" instance=ExtResource("3_nme6e")]
 
 [node name="Deck" type="Sprite2D" parent="."]
 editor_description = "Deck"
@@ -91,7 +91,7 @@ script = SubResource("GDScript_wrm1d")
 
 [node name="Foundation1" type="Node2D" parent="Foundations"]
 position = Vector2(996, 66)
-script = ExtResource("4_3dryh")
+script = ExtResource("4_3vbhj")
 
 [node name="DropArea" type="Area2D" parent="Foundations/Foundation1"]
 
