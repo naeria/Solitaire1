@@ -14,6 +14,9 @@ var is_dragging = false
 var drag_offset := Vector2.ZERO
 var original_parent
 var original_position
+var current_pile: Node2D = null
+
+
 
 func set_face_up(value: bool) -> void:
 	is_face_up = value
@@ -62,7 +65,8 @@ func _on_input_event(viewport, event, shape_idx):
 			drag_stack_offsets.clear()
 			for card in drag_stack:
 				drag_stack_offsets.append(card.global_position - drag_stack[0].global_position)
-			
+				print("Card in drag_stack:", card.name)
+
 			# Bring dragged cards to front (high z_index)
 			for i in range(drag_stack.size()):
 				drag_stack[i].z_index = 100 + i
@@ -140,46 +144,81 @@ func stop_drag():
 	drag_stack.clear()
 	drag_stack_offsets.clear()
 
+
 func try_drop():
 	var all_piles = get_node("/root/Game/Tableau").get_children() + get_node("/root/Game/Foundations").get_children()
 	var dropped = false
 
 	for pile in all_piles:
+		print("Checking pile:", pile.name)
+
 		var drop_area := pile.get_node_or_null("DropArea")
+		if not drop_area:
+			print("No DropArea found for pile:", pile.name)
 		if drop_area:
-			var shape = drop_area.get_node("CollisionShape2D")
+			var shape = drop_area.get_node_or_null("CollisionShape2D")
+			if not shape or not shape.shape:
+				print("Missing CollisionShape2D in DropArea of", pile.name)
+	
 			if shape and shape.shape is RectangleShape2D:
 				var rect_size = shape.shape.extents * 2
 				var rect_pos = drop_area.global_position - shape.shape.extents
 				var drop_rect = Rect2(rect_pos - Vector2(10, 10), rect_size + Vector2(20, 20))
+				print("Drop rect:", drop_rect, "Card global pos:", global_position)
 
-				if drop_rect.has_point(global_position):
+				print("Checking pile:", pile.name)
+				print("Drop rect:", drop_rect)
+				print("Card global position:", global_position)
+			
+				var mouse_pos = get_viewport().get_mouse_position()
+				if drop_rect.has_point(mouse_pos):
 
+					print("Drop point is within pile:", pile.name)
 					var is_foundation := pile.get_parent().name == "Foundations"
 					var top_card := get_top_faceup_card(pile)
-
+					print("Top card in pile:", top_card)
+					
 					if is_foundation:
-						# FOUNDATION RULES
-						if top_card == null and rank == 1 and drag_stack.size() == 1:
-							move_stack_to_pile(pile)
-							dropped = true
-							break
-						elif top_card and top_card.suit == suit and top_card.rank == rank - 1 and drag_stack.size() == 1:
-							move_stack_to_pile(pile)
-							dropped = true
-							break
-
-					else:
-						# TABLEAU RULES
+						print("Pile is a foundation")
+						print("Top card:", top_card)
 						if top_card == null:
-							if rank == 13: # King
+							print("Top card is null")
+							if rank == 1 and drag_stack.size() == 1:
+								print("Dropping Ace onto empty foundation")
 								move_stack_to_pile(pile)
 								dropped = true
+								drag_stack.clear()
+
+						elif top_card:
+							print("Top card suit:", top_card.suit, "Top card rank:", top_card.rank)
+							if top_card.suit == suit and top_card.rank == rank - 1 and drag_stack.size() == 1:
+								print("Dropping card onto matching foundation")
+								move_stack_to_pile(pile)
+								dropped = true
+								drag_stack.clear()
 								break
-						elif top_card.is_face_up and is_opposite_color(suit, top_card.suit) and rank == top_card.rank - 1:
-							move_stack_to_pile(pile)
-							dropped = true
-							break
+					else:
+						print("Pile is a tableau")
+						print("Top card:", top_card)
+						if top_card == null:
+							print("Top card is null (empty pile)")
+							if rank == 13:
+								print("Dropping King onto empty tableau")
+								move_stack_to_pile(pile)
+								dropped = true
+								drag_stack.clear()
+								break
+						elif top_card:
+							print("Top card is face up:", top_card.is_face_up)
+							print("Card rank:", rank, "Top card rank:", top_card.rank)
+							print("Card suit:", suit, "Top card suit:", top_card.suit)
+							print("Opposite color?", is_opposite_color(suit, top_card.suit))
+							if top_card.is_face_up and is_opposite_color(suit, top_card.suit) and rank == top_card.rank - 1:
+								print("Dropping card onto valid tableau stack")
+								move_stack_to_pile(pile)
+								dropped = true
+								drag_stack.clear()
+								break
 
 	if not dropped:
 		# Invalid drop, return to original pile
@@ -206,13 +245,32 @@ func get_top_faceup_card(pile: Node) -> Card:
 
 	return top_card
 
-
 func move_stack_to_pile(new_pile: Node):
+	# Determine the base stack height (i.e., how many cards are already in the pile)
+	var base_offset = 0
+	for child in new_pile.get_children():
+		if child.has_method("rank"):  # Identify actual card nodes
+			base_offset += 1
+
+	# Reparent and position each card in drag_stack
 	for i in drag_stack.size():
 		var card = drag_stack[i]
+
+		# Remove from old parent, add to new pile
+		if card.get_parent():
+			card.get_parent().remove_child(card)
 		new_pile.add_child(card)
-		card.position = Vector2(0, 30 * new_pile.get_child_count())
-		card.z_index = i
+
+		# Position in pile (30 px down per card, starting from base_offset)
+		card.position = Vector2(0, (base_offset + i) * 30)
+		card.z_index = base_offset + i
+
+		# Update card's metadata if needed
+		card.current_pile = new_pile
+		card.is_dragging = false
+
+		print("Moved card to pile:", new_pile.name, "at local pos:", card.position)
+
 
 func is_opposite_color(suit_a: String, suit_b: String) -> bool:
 	var red_suits = ["hearts", "diamonds"]
@@ -228,25 +286,9 @@ func is_valid_stack_drop(target_card: Card, moving_card: Card) -> bool:
 	var black_suits = ["clubs", "spades"]
 
 	var is_opposite_color = (target_card.suit in red_suits and moving_card.suit in black_suits) or \
-							(target_card.suit in black_suits and moving_card.suit in red_suits)
+		(target_card.suit in black_suits and moving_card.suit in red_suits)
 
 	return is_opposite_color and moving_card.rank == target_card.rank - 1
-
-func move_to_pile(new_pile: Node):
-	print("Moved card:", rank, "of", suit, "from", original_pile.name, "to", new_pile.name)
-	get_parent().remove_child(self)
-	new_pile.add_child(self)
-	position = Vector2(0, 12 * new_pile.get_child_count())  # offset logic
-	is_dragging = false
-	
-	# Wait one frame to ensure reparenting is finalized
-	await get_tree().process_frame
-	
-	# Flip top card of the original pile, if needed
-	if original_pile and original_pile.get_child_count() > 0:
-		var last_card = get_top_card(original_pile)
-		if last_card and not last_card.is_face_up:
-			last_card.set_face_up(true)
 
 func get_top_card(pile: Node) -> Card:
 	for i in range(pile.get_child_count() - 1, -1, -1):

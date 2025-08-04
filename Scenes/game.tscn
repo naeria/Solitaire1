@@ -1,9 +1,12 @@
 [gd_scene load_steps=10 format=3 uid="uid://c1ouo8lbp1ebm"]
 
-[ext_resource type="Script" path="res://Scripts/game.gd" id="1_wr7al"]
-[ext_resource type="Script" path="res://Scripts/tableau.gd" id="2_rb7bf"]
-[ext_resource type="PackedScene" path="res://Scenes/card.tscn" id="3_nme6e"]
-[ext_resource type="Script" path="res://Scripts/foundation1.gd" id="4_3vbhj"]
+[ext_resource type="Script" uid="uid://daswfnxijerxc" path="res://Scripts/game.gd" id="1_wr7al"]
+[ext_resource type="Script" uid="uid://bx6fkfnj8ait0" path="res://Scripts/tableau.gd" id="2_rb7bf"]
+[ext_resource type="PackedScene" uid="uid://crhqb022xmiav" path="res://Scenes/card.tscn" id="3_nme6e"]
+[ext_resource type="Script" uid="uid://cvmaamjr3lo6v" path="res://Scripts/foundation1.gd" id="4_3vbhj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wrm1d"]
+size = Vector2(125, 181.5)
 
 [sub_resource type="GDScript" id="GDScript_wrm1d"]
 script/source = "extends Node2D
@@ -18,9 +21,6 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 "
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_wrm1d"]
-size = Vector2(125, 181.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3dryh"]
 size = Vector2(125, 181.5)
@@ -49,36 +49,129 @@ script = ExtResource("2_rb7bf")
 position = Vector2(100, 300)
 
 [node name="Card" parent="Tableau/Pile1" instance=ExtResource("3_nme6e")]
+position = Vector2(2, 0)
+
+[node name="DropArea" type="Area2D" parent="Tableau/Pile1"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tableau/Pile1/DropArea"]
+shape = SubResource("RectangleShape2D_wrm1d")
+
+[node name="ColorRect" type="ColorRect" parent="Tableau/Pile1/DropArea"]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+color = Color(0.880147, 0.966564, 0.762222, 1)
+metadata/_edit_group_ = true
+metadata/_edit_use_anchors_ = true
 
 [node name="Pile2" type="Node2D" parent="Tableau"]
 position = Vector2(250, 300)
 
 [node name="Card" parent="Tableau/Pile2" instance=ExtResource("3_nme6e")]
 
+[node name="DropArea" type="Area2D" parent="Tableau/Pile2"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tableau/Pile2/DropArea"]
+shape = SubResource("RectangleShape2D_wrm1d")
+
+[node name="ColorRect" type="ColorRect" parent="Tableau/Pile2/DropArea"]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+color = Color(0.880147, 0.966564, 0.762222, 1)
+metadata/_edit_group_ = true
+metadata/_edit_use_anchors_ = true
+
 [node name="Pile3" type="Node2D" parent="Tableau"]
 position = Vector2(400, 300)
 
 [node name="Card" parent="Tableau/Pile3" instance=ExtResource("3_nme6e")]
+
+[node name="DropArea" type="Area2D" parent="Tableau/Pile3"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tableau/Pile3/DropArea"]
+shape = SubResource("RectangleShape2D_wrm1d")
+
+[node name="ColorRect" type="ColorRect" parent="Tableau/Pile3/DropArea"]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+color = Color(0.880147, 0.966564, 0.762222, 1)
+metadata/_edit_group_ = true
+metadata/_edit_use_anchors_ = true
 
 [node name="Pile4" type="Node2D" parent="Tableau"]
 position = Vector2(550, 300)
 
 [node name="Card" parent="Tableau/Pile4" instance=ExtResource("3_nme6e")]
 
+[node name="DropArea" type="Area2D" parent="Tableau/Pile4"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tableau/Pile4/DropArea"]
+shape = SubResource("RectangleShape2D_wrm1d")
+
+[node name="ColorRect" type="ColorRect" parent="Tableau/Pile4/DropArea"]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+color = Color(0.880147, 0.966564, 0.762222, 1)
+metadata/_edit_group_ = true
+metadata/_edit_use_anchors_ = true
+
 [node name="Pile5" type="Node2D" parent="Tableau"]
 position = Vector2(700, 300)
 
 [node name="Card" parent="Tableau/Pile5" instance=ExtResource("3_nme6e")]
+
+[node name="DropArea" type="Area2D" parent="Tableau/Pile5"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tableau/Pile5/DropArea"]
+shape = SubResource("RectangleShape2D_wrm1d")
+
+[node name="ColorRect" type="ColorRect" parent="Tableau/Pile5/DropArea"]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+color = Color(0.880147, 0.966564, 0.762222, 1)
+metadata/_edit_group_ = true
+metadata/_edit_use_anchors_ = true
 
 [node name="Pile6" type="Node2D" parent="Tableau"]
 position = Vector2(850, 300)
 
 [node name="Card" parent="Tableau/Pile6" instance=ExtResource("3_nme6e")]
 
+[node name="DropArea" type="Area2D" parent="Tableau/Pile6"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tableau/Pile6/DropArea"]
+position = Vector2(3, 0)
+shape = SubResource("RectangleShape2D_wrm1d")
+
+[node name="ColorRect" type="ColorRect" parent="Tableau/Pile6/DropArea"]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+color = Color(0.880147, 0.966564, 0.762222, 1)
+metadata/_edit_group_ = true
+metadata/_edit_use_anchors_ = true
+
 [node name="Pile7" type="Node2D" parent="Tableau"]
 position = Vector2(1000, 300)
 
 [node name="Card" parent="Tableau/Pile7" instance=ExtResource("3_nme6e")]
+
+[node name="DropArea" type="Area2D" parent="Tableau/Pile7"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tableau/Pile7/DropArea"]
+shape = SubResource("RectangleShape2D_wrm1d")
+
+[node name="ColorRect" type="ColorRect" parent="Tableau/Pile7/DropArea"]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+color = Color(0.880147, 0.966564, 0.762222, 1)
+metadata/_edit_group_ = true
+metadata/_edit_use_anchors_ = true
 
 [node name="Deck" type="Sprite2D" parent="."]
 editor_description = "Deck"
@@ -93,6 +186,9 @@ script = SubResource("GDScript_wrm1d")
 position = Vector2(996, 66)
 script = ExtResource("4_3vbhj")
 
+[node name="Card" parent="Foundations/Foundation1" instance=ExtResource("3_nme6e")]
+position = Vector2(4, 31)
+
 [node name="DropArea" type="Area2D" parent="Foundations/Foundation1"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Foundations/Foundation1/DropArea"]
@@ -100,15 +196,18 @@ position = Vector2(2, 31)
 shape = SubResource("RectangleShape2D_wrm1d")
 
 [node name="ColorRect" type="ColorRect" parent="Foundations/Foundation1/DropArea"]
-visible = false
-offset_left = -60.0
-offset_top = -58.0
-offset_right = 64.0
-offset_bottom = 120.0
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
 color = Color(0.880147, 0.966564, 0.762222, 1)
+metadata/_edit_group_ = true
+metadata/_edit_use_anchors_ = true
 
 [node name="Foundation2" type="Node2D" parent="Foundations"]
 position = Vector2(853, 68)
+
+[node name="Card" parent="Foundations/Foundation2" instance=ExtResource("3_nme6e")]
+position = Vector2(-3, 29)
 
 [node name="DropArea" type="Area2D" parent="Foundations/Foundation2"]
 
@@ -117,15 +216,17 @@ position = Vector2(-3, 29)
 shape = SubResource("RectangleShape2D_3dryh")
 
 [node name="ColorRect" type="ColorRect" parent="Foundations/Foundation2/DropArea"]
-visible = false
-offset_left = -65.0
-offset_top = -62.0
-offset_right = 59.0
-offset_bottom = 120.0
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
 color = Color(0.878431, 0.964706, 0.760784, 1)
+metadata/_edit_group_ = true
 
 [node name="Foundation3" type="Node2D" parent="Foundations"]
 position = Vector2(699, 66)
+
+[node name="Card" parent="Foundations/Foundation3" instance=ExtResource("3_nme6e")]
+position = Vector2(0, 31)
 
 [node name="DropArea" type="Area2D" parent="Foundations/Foundation3"]
 
@@ -134,29 +235,30 @@ position = Vector2(-3, 31)
 shape = SubResource("RectangleShape2D_wowpa")
 
 [node name="ColorRect" type="ColorRect" parent="Foundations/Foundation3/DropArea"]
-visible = false
-offset_left = -64.0
-offset_top = -58.0
-offset_right = 58.0
-offset_bottom = 121.0
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
 color = Color(0.878431, 0.964706, 0.760784, 1)
+metadata/_edit_group_ = true
 
 [node name="Foundation4" type="Node2D" parent="Foundations"]
 position = Vector2(542, 63)
 
+[node name="Card" parent="Foundations/Foundation4" instance=ExtResource("3_nme6e")]
+position = Vector2(8, 34)
+
 [node name="DropArea" type="Area2D" parent="Foundations/Foundation4"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Foundations/Foundation4/DropArea"]
-position = Vector2(9, 37)
+position = Vector2(8, 34)
 shape = SubResource("RectangleShape2D_i6g32")
 
 [node name="ColorRect" type="ColorRect" parent="Foundations/Foundation4/DropArea"]
-visible = false
-offset_left = -53.0
-offset_top = -52.0
-offset_right = 70.0
-offset_bottom = 127.0
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
 color = Color(0.878431, 0.964706, 0.760784, 1)
+metadata/_edit_group_ = true
 
 [connection signal="mouse_entered" from="Foundations/Foundation4/DropArea" to="." method="_on_drop_area_mouse_entered"]
 [connection signal="mouse_exited" from="Foundations/Foundation4/DropArea" to="." method="_on_drop_area_mouse_exited"]
