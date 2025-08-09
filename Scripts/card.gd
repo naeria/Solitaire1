@@ -40,7 +40,8 @@ func rank_to_name() -> String:
 
 func _ready():
 	area.input_event.connect(_on_input_event)
-
+	add_to_group("cards")
+	
 func _on_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton:
 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -252,6 +253,11 @@ func move_stack_to_pile(new_pile: Node):
 		if child.has_method("rank"):  # Identify actual card nodes
 			base_offset += 1
 
+	# Track the original pile before moving
+	var original_pile = null
+	if drag_stack.size() > 0:
+		original_pile = drag_stack[0].current_pile
+
 	# Reparent and position each card in drag_stack
 	for i in drag_stack.size():
 		var card = drag_stack[i]
@@ -265,12 +271,19 @@ func move_stack_to_pile(new_pile: Node):
 		card.position = Vector2(0, (base_offset + i) * 30)
 		card.z_index = base_offset + i
 
-		# Update card's metadata if needed
+		# Update card's metadata
 		card.current_pile = new_pile
 		card.is_dragging = false
 
 		print("Moved card to pile:", new_pile.name, "at local pos:", card.position)
 
+	# Hide outline from new pile if needed
+	if new_pile.has_method("update_outline"):
+		new_pile.update_outline()
+
+	# Hide outline from original pile if needed
+	if original_pile and original_pile.has_method("update_outline"):
+		original_pile.update_outline()
 
 func is_opposite_color(suit_a: String, suit_b: String) -> bool:
 	var red_suits = ["hearts", "diamonds"]

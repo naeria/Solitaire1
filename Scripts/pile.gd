@@ -1,13 +1,15 @@
 extends Node2D
 
-@onready var outline = $DropArea/ColorRect
 
-func _on_drop_area_mouse_entered():
-	outline.visible = true
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
 
-func _on_drop_area_mouse_exited():
-	outline.visible = false
 
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+	
 func update_outline():
 	print("Called update_outline on", name)
 	var card_count = 0
