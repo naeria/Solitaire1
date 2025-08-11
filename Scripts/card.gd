@@ -17,7 +17,6 @@ var original_position
 var current_pile: Node2D = null
 
 
-
 func set_face_up(value: bool) -> void:
 	is_face_up = value
 	print("Flipping card:", rank, "of", suit, " → face_up:", is_face_up)
@@ -95,14 +94,50 @@ func _process(delta):
 
 func start_drag():
 	is_dragging = true
-	drag_offset = get_global_mouse_position() - global_position
-	original_parent = get_parent()
-	original_position = global_position
-	original_pile = get_parent()
-	# raise()  # brings to front
-	# Bring to front
-	z_index = 1000  # Large value to ensure it's on top
-	get_parent().move_child(self, get_parent().get_child_count() - 1)
+	drag_stack.clear() # <- This is the crucial line.
+	
+	# Clear the drag_stack before populating it
+	drag_stack.clear()
+	
+	# Get all cards in the pile from this card onward
+	var my_index = get_index()
+	var parent_children = get_parent().get_children()
+	for i in range(my_index, parent_children.size()):
+		var child = parent_children[i]
+		if child.has_method("rank"): # Make sure it's a card
+			drag_stack.append(child)
+			
+	# Reparent the entire stack to the main game node
+	var game_node = get_tree().get_root().get_node("Game")
+	var first_card_pos = get_global_mouse_position()
+	var offset_from_first_card = Vector2.ZERO
+	
+	for i in range(drag_stack.size()):
+		var card = drag_stack[i]
+		
+		# Reparent to the Game node to allow for free movement
+		card.reparent(game_node)
+		
+		# Store the original position
+		card.original_position = card.global_position
+		
+		# Set the z_index to a high value to ensure the entire stack is on top
+		card.z_index = 1000 + i
+		
+		# Calculate the position relative to the mouse
+		if i == 0:
+			# The first card follows the mouse directly
+			offset_from_first_card = first_card_pos - card.original_position
+			card.global_position = first_card_pos
+		else:
+			# Subsequent cards maintain their relative position to the first card
+			card.global_position = card.original_position + offset_from_first_card
+			
+	# The first card is the one being controlled by the mouse
+	var first_card = drag_stack[0]
+	drag_offset = first_card_pos - first_card.global_position
+	
+	print("Dragging stack of size:", drag_stack.size())
 
 func stop_drag():
 	is_dragging = false
@@ -247,6 +282,10 @@ func get_top_faceup_card(pile: Node) -> Card:
 	return top_card
 
 func move_stack_to_pile(new_pile: Node):
+	# When adding a card to a pile
+	var card_index = new_pile.get_child_count()
+	# card.z_index = card_index
+	
 	# Determine the base stack height (i.e., how many cards are already in the pile)
 	var base_offset = 0
 	for child in new_pile.get_children():
@@ -258,22 +297,25 @@ func move_stack_to_pile(new_pile: Node):
 	if drag_stack.size() > 0:
 		original_pile = drag_stack[0].current_pile
 
-	# Reparent and position each card in drag_stack
-	for i in drag_stack.size():
+	for i in range(drag_stack.size()):
 		var card = drag_stack[i]
+		
+		# Reparent the card correctly
+		card.reparent(new_pile)
 
-		# Remove from old parent, add to new pile
-		if card.get_parent():
-			card.get_parent().remove_child(card)
-		new_pile.add_child(card)
-
-		# Position in pile (30 px down per card, starting from base_offset)
+		# Set the position based on its new index
 		card.position = Vector2(0, (base_offset + i) * 30)
+
+		# Set the z_index based on its new index in the pile
 		card.z_index = base_offset + i
 
-		# Update card's metadata
+		# Update card properties
 		card.current_pile = new_pile
 		card.is_dragging = false
+		
+		# Check if the card is face-up and adjust its z_index accordingly
+		if card.is_face_up:
+			card.z_index += 100 # Or whatever your face-up offset is
 
 		print("Moved card to pile:", new_pile.name, "at local pos:", card.position)
 
@@ -330,3 +372,15 @@ func get_drag_stack(start_card: Card) -> Array[Card]:
 			stack.append(child)
 
 	return stack
+
+const BASE_Z_INDEX = 0
+const FACEUP_Z_OFFSET = 100 # This should be greater than the max number of cards (52)
+
+func flip_card(card):
+	card.is_facedown = not card.is_facedown
+	if not card.is_facedown:
+		# If it's a face-up card, ensure it's drawn on top
+		card.z_index += FACEUP_Z_OFFSET
+	else:
+		# If it's face-down, revert to its original z_index
+		card.z_index -= FACEUP_Z_OFFSET
