@@ -54,7 +54,7 @@ script = ExtResource("3_i6g32")
 [node name="Card" parent="Tableau/Pile1" instance=ExtResource("3_nme6e")]
 position = Vector2(2, 0)
 
-[node name="DropArea" type="Area2D" parent="Tableau/Pile1"]
+[node name="DropArea" type="Area2D" parent="Tableau/Pile1" groups=["DropArea"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tableau/Pile1/DropArea"]
 shape = SubResource("RectangleShape2D_wrm1d")
@@ -66,7 +66,7 @@ position = Vector2(250, 300)
 
 [node name="Card" parent="Tableau/Pile2" instance=ExtResource("3_nme6e")]
 
-[node name="DropArea" type="Area2D" parent="Tableau/Pile2"]
+[node name="DropArea" type="Area2D" parent="Tableau/Pile2" groups=["DropArea"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tableau/Pile2/DropArea"]
 shape = SubResource("RectangleShape2D_wrm1d")
@@ -78,7 +78,7 @@ position = Vector2(400, 300)
 
 [node name="Card" parent="Tableau/Pile3" instance=ExtResource("3_nme6e")]
 
-[node name="DropArea" type="Area2D" parent="Tableau/Pile3"]
+[node name="DropArea" type="Area2D" parent="Tableau/Pile3" groups=["DropArea"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tableau/Pile3/DropArea"]
 shape = SubResource("RectangleShape2D_wrm1d")
@@ -90,7 +90,7 @@ position = Vector2(550, 300)
 
 [node name="Card" parent="Tableau/Pile4" instance=ExtResource("3_nme6e")]
 
-[node name="DropArea" type="Area2D" parent="Tableau/Pile4"]
+[node name="DropArea" type="Area2D" parent="Tableau/Pile4" groups=["DropArea"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tableau/Pile4/DropArea"]
 shape = SubResource("RectangleShape2D_wrm1d")
@@ -102,7 +102,7 @@ position = Vector2(700, 300)
 
 [node name="Card" parent="Tableau/Pile5" instance=ExtResource("3_nme6e")]
 
-[node name="DropArea" type="Area2D" parent="Tableau/Pile5"]
+[node name="DropArea" type="Area2D" parent="Tableau/Pile5" groups=["DropArea"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tableau/Pile5/DropArea"]
 shape = SubResource("RectangleShape2D_wrm1d")
@@ -114,7 +114,7 @@ position = Vector2(850, 300)
 
 [node name="Card" parent="Tableau/Pile6" instance=ExtResource("3_nme6e")]
 
-[node name="DropArea" type="Area2D" parent="Tableau/Pile6"]
+[node name="DropArea" type="Area2D" parent="Tableau/Pile6" groups=["DropArea"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tableau/Pile6/DropArea"]
 position = Vector2(3, 0)
@@ -127,7 +127,7 @@ position = Vector2(1000, 300)
 
 [node name="Card" parent="Tableau/Pile7" instance=ExtResource("3_nme6e")]
 
-[node name="DropArea" type="Area2D" parent="Tableau/Pile7"]
+[node name="DropArea" type="Area2D" parent="Tableau/Pile7" groups=["DropArea"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tableau/Pile7/DropArea"]
 shape = SubResource("RectangleShape2D_wrm1d")
@@ -151,7 +151,7 @@ script = ExtResource("4_3vbhj")
 [node name="Card" parent="Foundations/Foundation1" instance=ExtResource("3_nme6e")]
 position = Vector2(4, 31)
 
-[node name="DropArea" type="Area2D" parent="Foundations/Foundation1"]
+[node name="DropArea" type="Area2D" parent="Foundations/Foundation1" groups=["DropArea"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Foundations/Foundation1/DropArea"]
 position = Vector2(2, 31)
@@ -165,7 +165,7 @@ position = Vector2(853, 82)
 [node name="Card" parent="Foundations/Foundation2" instance=ExtResource("3_nme6e")]
 position = Vector2(-3, 29)
 
-[node name="DropArea" type="Area2D" parent="Foundations/Foundation2"]
+[node name="DropArea" type="Area2D" parent="Foundations/Foundation2" groups=["DropArea"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Foundations/Foundation2/DropArea"]
 position = Vector2(-3, 29)
@@ -179,7 +179,7 @@ position = Vector2(699, 80)
 [node name="Card" parent="Foundations/Foundation3" instance=ExtResource("3_nme6e")]
 position = Vector2(0, 31)
 
-[node name="DropArea" type="Area2D" parent="Foundations/Foundation3"]
+[node name="DropArea" type="Area2D" parent="Foundations/Foundation3" groups=["DropArea"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Foundations/Foundation3/DropArea"]
 position = Vector2(-3, 31)
@@ -193,7 +193,7 @@ position = Vector2(542, 77)
 [node name="Card" parent="Foundations/Foundation4" instance=ExtResource("3_nme6e")]
 position = Vector2(8, 34)
 
-[node name="DropArea" type="Area2D" parent="Foundations/Foundation4"]
+[node name="DropArea" type="Area2D" parent="Foundations/Foundation4" groups=["DropArea"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Foundations/Foundation4/DropArea"]
 position = Vector2(8, 34)
