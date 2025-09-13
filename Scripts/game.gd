@@ -8,6 +8,8 @@ var suits := ["spades", "hearts", "diamonds", "clubs"]
 var deck := []
 
 func _ready():
+	seed(12345)
+	
 	generate_deck()
 	shuffle_deck()
 	print("Deck size before dealing:", deck.size())

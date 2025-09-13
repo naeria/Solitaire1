@@ -291,24 +291,19 @@ func move_stack_to_pile(new_pile: Node):
 	for child in new_pile.get_children():
 		if child.has_method("rank"):  # Identify actual card nodes
 			base_offset += 1
-
 	# Track the original pile before moving
 	var original_pile = null
 	if drag_stack.size() > 0:
 		original_pile = drag_stack[0].current_pile
-
 	for i in range(drag_stack.size()):
 		var card = drag_stack[i]
 		
 		# Reparent the card correctly
 		card.reparent(new_pile)
-
 		# Set the position based on its new index
 		card.position = Vector2(0, (base_offset + i) * 30)
-
 		# Set the z_index based on its new index in the pile
 		card.z_index = base_offset + i
-
 		# Update card properties
 		card.current_pile = new_pile
 		card.is_dragging = false
@@ -316,9 +311,7 @@ func move_stack_to_pile(new_pile: Node):
 		# Check if the card is face-up and adjust its z_index accordingly
 		if card.is_face_up:
 			card.z_index += 100 # Or whatever your face-up offset is
-
 		print("Moved card to pile:", new_pile.name, "at local pos:", card.position)
-
 	# Hide outline from new pile if needed
 	if new_pile.has_method("update_outline"):
 		new_pile.update_outline()
