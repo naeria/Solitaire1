@@ -1,18 +1,16 @@
 extends Node2D
 
-const FACE_DOWN_OFFSET = 12
-const FACE_UP_OFFSET = 12
+var CARD_OFFSET: float = Global.card_offset
 
 var CardScene := preload("res://Scenes/Card.tscn")
 var suits := ["spades", "hearts", "diamonds", "clubs"]
 var deck := []
 
 func _ready():
-	seed(12345)
+	seed(11111)
 	
 	generate_deck()
 	shuffle_deck()
-	print("Deck size before dealing:", deck.size())
 	deal_to_tableau()
 
 func generate_deck():
@@ -22,7 +20,6 @@ func generate_deck():
 			var card = CardScene.instantiate()
 			card.suit = suit
 			card.rank = rank
-			card.set_face_up(true)  # cards are face-down initially
 			deck.append(card)
 
 func shuffle_deck():
@@ -37,7 +34,6 @@ func deal_to_tableau():
 
 		for j in range(total_cards):
 			if deck.size() == 0:
-				print("❌ Ran out of cards while dealing to ", pile.name)
 				return  # or break
 
 			var card = deck.pop_front()
@@ -56,9 +52,7 @@ func deal_to_tableau():
 
 			# Only increase offset if this is not a single-card pile
 			if total_cards != 1:
-				y_offset += FACE_UP_OFFSET if is_top else FACE_DOWN_OFFSET
-
-			print(pile.name, " card ", j, ": ", card.rank, " of ", card.suit, " at y=", card.position.y)
+				y_offset += CARD_OFFSET
 
 
 func _on_drop_area_mouse_entered() -> void:

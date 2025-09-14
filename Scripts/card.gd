@@ -16,10 +16,30 @@ var original_parent
 var original_position
 var current_pile: Node2D = null
 
+var is_first_card: bool = false
+func _ready():
+	if is_face_up && !Global.first_card_taken:
+		is_first_card = true
+		Global.first_card_taken = true
+	
+	area.input_event.connect(_on_input_event)
+	add_to_group("cards")
+
+
+func _process(delta):
+	if is_first_card:
+		#print(position.y)
+		pass
+	
+	if is_dragging:
+		global_position = get_global_mouse_position() - drag_offset
+
+
+
+
 
 func set_face_up(value: bool) -> void:
 	is_face_up = value
-	print("Flipping card:", rank, "of", suit, " → face_up:", is_face_up)
 
 	if is_face_up:
 		var name = "%s_of_%s.png" % [rank_to_name(), suit]
@@ -37,10 +57,8 @@ func rank_to_name() -> String:
 		13: return "king"
 		_: return str(rank)
 
-func _ready():
-	area.input_event.connect(_on_input_event)
-	add_to_group("cards")
-	
+
+
 func _on_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton:
 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -65,7 +83,6 @@ func _on_input_event(viewport, event, shape_idx):
 			drag_stack_offsets.clear()
 			for card in drag_stack:
 				drag_stack_offsets.append(card.global_position - drag_stack[0].global_position)
-				print("Card in drag_stack:", card.name)
 
 			# Bring dragged cards to front (high z_index)
 			for i in range(drag_stack.size()):
@@ -88,9 +105,6 @@ func _on_input_event(viewport, event, shape_idx):
 				drag_stack[i].global_position = global_pos + drag_offset + offset
 
 
-func _process(delta):
-	if is_dragging:
-		global_position = get_global_mouse_position() - drag_offset
 
 func start_drag():
 	is_dragging = true
@@ -137,7 +151,6 @@ func start_drag():
 	var first_card = drag_stack[0]
 	drag_offset = first_card_pos - first_card.global_position
 	
-	print("Dragging stack of size:", drag_stack.size())
 
 func stop_drag():
 	is_dragging = false
@@ -186,71 +199,42 @@ func try_drop():
 	var dropped = false
 
 	for pile in all_piles:
-		print("Checking pile:", pile.name)
-
 		var drop_area := pile.get_node_or_null("DropArea")
-		if not drop_area:
-			print("No DropArea found for pile:", pile.name)
 		if drop_area:
 			var shape = drop_area.get_node_or_null("CollisionShape2D")
-			if not shape or not shape.shape:
-				print("Missing CollisionShape2D in DropArea of", pile.name)
 	
 			if shape and shape.shape is RectangleShape2D:
 				var rect_size = shape.shape.extents * 2
 				var rect_pos = drop_area.global_position - shape.shape.extents
 				var drop_rect = Rect2(rect_pos - Vector2(10, 10), rect_size + Vector2(20, 20))
-				print("Drop rect:", drop_rect, "Card global pos:", global_position)
-
-				print("Checking pile:", pile.name)
-				print("Drop rect:", drop_rect)
-				print("Card global position:", global_position)
 			
 				var mouse_pos = get_viewport().get_mouse_position()
 				if drop_rect.has_point(mouse_pos):
-
-					print("Drop point is within pile:", pile.name)
 					var is_foundation := pile.get_parent().name == "Foundations"
 					var top_card := get_top_faceup_card(pile)
-					print("Top card in pile:", top_card)
 					
 					if is_foundation:
-						print("Pile is a foundation")
-						print("Top card:", top_card)
 						if top_card == null:
-							print("Top card is null")
 							if rank == 1 and drag_stack.size() == 1:
-								print("Dropping Ace onto empty foundation")
 								move_stack_to_pile(pile)
 								dropped = true
 								drag_stack.clear()
 
 						elif top_card:
-							print("Top card suit:", top_card.suit, "Top card rank:", top_card.rank)
 							if top_card.suit == suit and top_card.rank == rank - 1 and drag_stack.size() == 1:
-								print("Dropping card onto matching foundation")
 								move_stack_to_pile(pile)
 								dropped = true
 								drag_stack.clear()
 								break
 					else:
-						print("Pile is a tableau")
-						print("Top card:", top_card)
 						if top_card == null:
-							print("Top card is null (empty pile)")
 							if rank == 13:
-								print("Dropping King onto empty tableau")
 								move_stack_to_pile(pile)
 								dropped = true
 								drag_stack.clear()
 								break
 						elif top_card:
-							print("Top card is face up:", top_card.is_face_up)
-							print("Card rank:", rank, "Top card rank:", top_card.rank)
-							print("Card suit:", suit, "Top card suit:", top_card.suit)
-							print("Opposite color?", is_opposite_color(suit, top_card.suit))
 							if top_card.is_face_up and is_opposite_color(suit, top_card.suit) and rank == top_card.rank - 1:
-								print("Dropping card onto valid tableau stack")
 								move_stack_to_pile(pile)
 								dropped = true
 								drag_stack.clear()
@@ -259,7 +243,6 @@ func try_drop():
 	if not dropped:
 		# Invalid drop, return to original pile
 		move_stack_to_pile(original_pile)
-		print("Invalid drop — returned to original pile")
 
 func get_global_rect() -> Rect2:
 	var sprite = $Sprite2D
@@ -289,7 +272,8 @@ func move_stack_to_pile(new_pile: Node):
 	# Determine the base stack height (i.e., how many cards are already in the pile)
 	var base_offset = 0
 	for child in new_pile.get_children():
-		if child.has_method("rank"):  # Identify actual card nodes
+		if child.has_method("rank_to_name"):  # Identify actual card nodes
+			print("MADE HERE")
 			base_offset += 1
 	# Track the original pile before moving
 	var original_pile = null
@@ -301,7 +285,9 @@ func move_stack_to_pile(new_pile: Node):
 		# Reparent the card correctly
 		card.reparent(new_pile)
 		# Set the position based on its new index
-		card.position = Vector2(0, (base_offset + i) * 30)
+		print(i)
+		card.position = Vector2(0, (base_offset + i) * 15)
+		#card.position = Vector2(0,30)
 		# Set the z_index based on its new index in the pile
 		card.z_index = base_offset + i
 		# Update card properties
@@ -311,7 +297,6 @@ func move_stack_to_pile(new_pile: Node):
 		# Check if the card is face-up and adjust its z_index accordingly
 		if card.is_face_up:
 			card.z_index += 100 # Or whatever your face-up offset is
-		print("Moved card to pile:", new_pile.name, "at local pos:", card.position)
 	# Hide outline from new pile if needed
 	if new_pile.has_method("update_outline"):
 		new_pile.update_outline()

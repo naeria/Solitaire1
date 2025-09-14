@@ -15,7 +15,6 @@ func _ready():
 
 
 func _draw():
-	print("Drawing outline at", global_position)
 	var padded_size = size - Vector2(padding * 2, padding * 2)
 	var rect = Rect2(-padded_size / 2, padded_size)
 	draw_rect(rect, color, false, thickness)
