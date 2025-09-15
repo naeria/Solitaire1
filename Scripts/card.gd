@@ -25,8 +25,9 @@ func _ready():
 	area.input_event.connect(_on_input_event)
 	add_to_group("cards")
 
-
+var time_passed: float = 0.0
 func _process(delta):
+	time_passed += delta
 	if is_first_card:
 		#print(position.y)
 		pass
@@ -285,8 +286,8 @@ func move_stack_to_pile(new_pile: Node):
 		# Reparent the card correctly
 		card.reparent(new_pile)
 		# Set the position based on its new index
-		print(i)
-		card.position = Vector2(0, (base_offset + i) * 15)
+		print(base_offset)
+		card.position = Vector2(0, (base_offset - 1) * 12)
 		#card.position = Vector2(0,30)
 		# Set the z_index based on its new index in the pile
 		card.z_index = base_offset + i
