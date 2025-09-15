@@ -270,13 +270,14 @@ func move_stack_to_pile(new_pile: Node):
 	var card_index = new_pile.get_child_count()
 	# card.z_index = card_index
 	
-	# Determine the base stack height (i.e., how many cards are already in the pile)
-	var base_offset = 0
-	for child in new_pile.get_children():
-		if child.has_method("rank_to_name"):  # Identify actual card nodes
-			print("MADE HERE")
-			base_offset += 1
-	# Track the original pile before moving
+	## Determine the base stack height (i.e., how many cards are already in the pile)
+	#var base_offset = 0
+	#for child in new_pile.get_children():
+		#if child.has_method("rank_to_name"):  # Identify actual card nodes
+			#base_offset += 1
+	## Track the original pile before moving
+	var target_pile_amount: int = new_pile.get_amount()
+	
 	var original_pile = null
 	if drag_stack.size() > 0:
 		original_pile = drag_stack[0].current_pile
@@ -286,11 +287,9 @@ func move_stack_to_pile(new_pile: Node):
 		# Reparent the card correctly
 		card.reparent(new_pile)
 		# Set the position based on its new index
-		print(base_offset)
-		card.position = Vector2(0, (base_offset - 1) * 12)
-		#card.position = Vector2(0,30)
+		card.position = Vector2(0, (target_pile_amount - 1) * 12)
 		# Set the z_index based on its new index in the pile
-		card.z_index = base_offset + i
+		card.z_index = target_pile_amount + i
 		# Update card properties
 		card.current_pile = new_pile
 		card.is_dragging = false

@@ -63,6 +63,7 @@ shape = SubResource("RectangleShape2D_wrm1d")
 
 [node name="Pile2" type="Node2D" parent="Tableau"]
 position = Vector2(250, 300)
+script = ExtResource("3_i6g32")
 
 [node name="Card" parent="Tableau/Pile2" instance=ExtResource("3_nme6e")]
 
@@ -75,6 +76,7 @@ shape = SubResource("RectangleShape2D_wrm1d")
 
 [node name="Pile3" type="Node2D" parent="Tableau"]
 position = Vector2(400, 300)
+script = ExtResource("3_i6g32")
 
 [node name="Card" parent="Tableau/Pile3" instance=ExtResource("3_nme6e")]
 
@@ -87,6 +89,7 @@ shape = SubResource("RectangleShape2D_wrm1d")
 
 [node name="Pile4" type="Node2D" parent="Tableau"]
 position = Vector2(550, 300)
+script = ExtResource("3_i6g32")
 
 [node name="Card" parent="Tableau/Pile4" instance=ExtResource("3_nme6e")]
 
@@ -99,6 +102,7 @@ shape = SubResource("RectangleShape2D_wrm1d")
 
 [node name="Pile5" type="Node2D" parent="Tableau"]
 position = Vector2(700, 300)
+script = ExtResource("3_i6g32")
 
 [node name="Card" parent="Tableau/Pile5" instance=ExtResource("3_nme6e")]
 
@@ -111,6 +115,7 @@ shape = SubResource("RectangleShape2D_wrm1d")
 
 [node name="Pile6" type="Node2D" parent="Tableau"]
 position = Vector2(850, 300)
+script = ExtResource("3_i6g32")
 
 [node name="Card" parent="Tableau/Pile6" instance=ExtResource("3_nme6e")]
 
@@ -124,6 +129,7 @@ shape = SubResource("RectangleShape2D_wrm1d")
 
 [node name="Pile7" type="Node2D" parent="Tableau"]
 position = Vector2(1000, 300)
+script = ExtResource("3_i6g32")
 
 [node name="Card" parent="Tableau/Pile7" instance=ExtResource("3_nme6e")]
 

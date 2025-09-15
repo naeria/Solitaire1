@@ -10,7 +10,11 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
-	
+
+func get_amount() -> int:
+	return cards_in_pile
+
+
 func update_outline():
 	cards_in_pile = 0
 	for child in get_children():
