@@ -299,9 +299,12 @@ func move_stack_to_pile(new_pile: Node):
 		# Reparent the card correctly
 		card.reparent(new_pile)
 		# Set the position based on its new index
+		print("i: " + str(i))
 		if ignore_ghost_cards:
+			print("IGNORE GHOST")
 			card.position = Vector2(0, (target_pile_amount + i - target_pile_up_amount) * Global.card_offset)
 		else:
+			print("NORMAL")
 			card.position = Vector2(0, (target_pile_amount + i) * Global.card_offset)
 		# Set the z_index based on its new index in the pile
 		card.z_index = target_pile_amount + i
