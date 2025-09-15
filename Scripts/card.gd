@@ -179,13 +179,14 @@ func stop_drag():
 				drag_stack.clear()
 				drag_stack_offsets.clear()
 				break
-
-	if not dropped:
-		move_stack_to_pile(original_pile)
-		drag_stack.clear()
-		drag_stack_offsets.clear()
-
 	
+	unsuccessful_drop()
+
+
+func unsuccessful_drop():
+	move_stack_to_pile(original_pile)
+	drag_stack.clear()
+	drag_stack_offsets.clear()
 	# ✅ After the stack is moved away, check the original pile
 	if original_pile and original_pile.get_child_count() > 0:
 		var top_card = get_top_card(original_pile)
@@ -193,7 +194,6 @@ func stop_drag():
 			top_card.set_face_up(true)
 	drag_stack.clear()
 	drag_stack_offsets.clear()
-
 
 func try_drop():
 	var all_piles = get_node("/root/Game/Tableau").get_children() + get_node("/root/Game/Foundations").get_children()
@@ -265,18 +265,30 @@ func get_top_faceup_card(pile: Node) -> Card:
 
 	return top_card
 
+func get_pile_index() -> int:
+	var number: int = -1 # Default to an invalid value
+	var parent = get_parent()
+	if parent:
+		var regex = RegEx.new()
+		regex.compile("\\d+")
+		var result = regex.search(parent.name)
+		if result:
+			number = int(result.get_string())
+	
+	return number
+
+
 func move_stack_to_pile(new_pile: Node):
+	var ignore_ghost_cards: bool = false
+	if get_pile_index() == new_pile.pile_index:
+		ignore_ghost_cards = true
+	
 	# When adding a card to a pile
 	var card_index = new_pile.get_child_count()
 	# card.z_index = card_index
 	
-	## Determine the base stack height (i.e., how many cards are already in the pile)
-	#var base_offset = 0
-	#for child in new_pile.get_children():
-		#if child.has_method("rank_to_name"):  # Identify actual card nodes
-			#base_offset += 1
-	## Track the original pile before moving
 	var target_pile_amount: int = new_pile.get_amount()
+	var target_pile_up_amount: int = new_pile.get_up_amount()
 	
 	var original_pile = null
 	if drag_stack.size() > 0:
@@ -287,7 +299,10 @@ func move_stack_to_pile(new_pile: Node):
 		# Reparent the card correctly
 		card.reparent(new_pile)
 		# Set the position based on its new index
-		card.position = Vector2(0, (target_pile_amount - 1) * 12)
+		if ignore_ghost_cards:
+			card.position = Vector2(0, (target_pile_amount + i - target_pile_up_amount) * Global.card_offset)
+		else:
+			card.position = Vector2(0, (target_pile_amount + i) * Global.card_offset)
 		# Set the z_index based on its new index in the pile
 		card.z_index = target_pile_amount + i
 		# Update card properties

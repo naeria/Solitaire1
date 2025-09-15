@@ -6,6 +6,16 @@ var CardScene := preload("res://Scenes/Card.tscn")
 var suits := ["spades", "hearts", "diamonds", "clubs"]
 var deck := []
 
+@onready var pile_1: Node2D = $Tableau/Pile1
+@onready var pile_2: Node2D = $Tableau/Pile2
+@onready var pile_3: Node2D = $Tableau/Pile3
+@onready var pile_4: Node2D = $Tableau/Pile4
+@onready var pile_5: Node2D = $Tableau/Pile5
+@onready var pile_6: Node2D = $Tableau/Pile6
+@onready var pile_7: Node2D = $Tableau/Pile7
+
+@onready var pile_array := [pile_1,pile_2,pile_3,pile_4,pile_5,pile_6,pile_7]
+
 func _ready():
 	seed(11111)
 	
@@ -53,6 +63,12 @@ func deal_to_tableau():
 			# Only increase offset if this is not a single-card pile
 			if total_cards != 1:
 				y_offset += CARD_OFFSET
+	
+	var i: int = 0
+	for pile in pile_array:
+		i += 1
+		pile.pile_index = i
+		pile.update_outline()
 
 
 func _on_drop_area_mouse_entered() -> void:
